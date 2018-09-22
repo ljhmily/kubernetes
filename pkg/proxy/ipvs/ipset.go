@@ -88,7 +88,8 @@ type IPSet struct {
 }
 
 // NewIPSet initialize a new IPSet struct
-func NewIPSet(handle utilipset.Interface, name string, setType utilipset.Type, isIPv6 bool, comment string) *IPSet {
+//func NewIPSet(handle utilipset.Interface, name string, setType utilipset.Type, isIPv6 bool, comment string) *IPSet {
+func NewIPSet(handle utilipset.Interface, name string, setType utilipset.Type, isIPv6 bool) *IPSet {
 	hashFamily := utilipset.ProtocolFamilyIPV4
 	if isIPv6 {
 		hashFamily = utilipset.ProtocolFamilyIPV6
@@ -98,7 +99,6 @@ func NewIPSet(handle utilipset.Interface, name string, setType utilipset.Type, i
 			Name:       name,
 			SetType:    setType,
 			HashFamily: hashFamily,
-			Comment:    comment,
 		},
 		activeEntries: sets.NewString(),
 		handle:        handle,
@@ -112,10 +112,6 @@ func (set *IPSet) validateEntry(entry *utilipset.Entry) bool {
 
 func (set *IPSet) isEmpty() bool {
 	return len(set.activeEntries.UnsortedList()) == 0
-}
-
-func (set *IPSet) getComment() string {
-	return fmt.Sprintf("\"%s\"", set.Comment)
 }
 
 func (set *IPSet) resetEntries() {
